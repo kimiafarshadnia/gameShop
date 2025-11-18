@@ -1,11 +1,12 @@
-import {NavBar} from "@/components";
+import {Header, HeroSlider} from "@/components";
 
 
 export default function Home() {
   return (
-    <main className="container mx-auto px-4 md:px-8">
-      <div className="flex flex-col gap-20 w-full">
-       <NavBar/>
+    <main>
+      <div className="flex flex-col gap-10 w-full">
+       <Header/>
+       <HeroSlider/>
       </div>
     </main>
   );

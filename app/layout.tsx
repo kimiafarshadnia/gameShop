@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="fr" dir="rtl">
       <body
-        
+        className="bg-gray-100"
       >
         {children}
       </body>

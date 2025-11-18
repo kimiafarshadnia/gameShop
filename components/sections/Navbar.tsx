@@ -1,19 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sheet,
   SheetContent,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Menu } from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { menuItems } from "@/constant";
 import { MenuItem } from "@/types";
+import { Input } from "../ui/input";
+
+import Link from "next/link";
 import Image from "next/image";
+import BasketCard from "../cards/BasketCard";
 
 function SubMenu({
   items,
@@ -36,7 +41,7 @@ function SubMenu({
   // 📱 موبایل
   if (mobile) {
     return (
-      <ul className="space-y-2 pr-3">
+      <ul className="space-y-2 px-4">
         {items.map((item) => (
           <li key={item.title}>
             <div className="flex justify-between items-center">
@@ -84,12 +89,7 @@ function SubMenu({
     <ul className="flex flex-col gap-4">
       {items.map((item) => (
         <li key={item.title}>
-          <Link
-            href={item.href || ""}
-            className="font-semibold"
-          >
-            {item.title}
-          </Link>
+          <Link href={item.href || ""}>{item.title}</Link>
           {item.sub && (
             <div className="flex flex-col gap-4">
               <SubMenu items={item.sub} />
@@ -101,7 +101,7 @@ function SubMenu({
   );
 }
 
-const NavBar=()=> {
+const NavBar = () => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const pathname = usePathname();
 
@@ -115,16 +115,17 @@ const NavBar=()=> {
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-
+          <VisuallyHidden>
+            <SheetTitle>عنوان مخفی برای screen reader</SheetTitle>
+          </VisuallyHidden>
           <SheetContent side="left" className="">
-            <div className="flex justify-center mb-6">
-              <Link href="/" onClick={() => window.location.assign("/")}>
+            <div className="flex justify-center py-6">
+              <Link href="/">
                 <Image
-                  src="/images/completeLogo.svg"
-                  alt="Logo"
-                  className="object-contain"
-                  width={100}
-                  height={100}
+                  src="/assets/images/menu/header-logo.svg"
+                  alt="logo"
+                  width={200}
+                  height={80}
                 />
               </Link>
             </div>
@@ -134,60 +135,97 @@ const NavBar=()=> {
         </Sheet>
       </div>
 
-      {/* 💻 دسکتاپ */}
-<nav className="hidden md:flex items-start justify-end gap-8 relative">
-  <ul className="flex gap-10">
-    {menuItems.map((item) => {
-      const isActive =
-        pathname === item.href ||
-        (item.sub && item.sub.some((s) => pathname.startsWith(s.href || "")));
-
-      return (
-        <li key={item.title} className="relative">
-          {/* آیتم اصلی */}
-          <div
-            className={`flex items-center gap-1 font-medium cursor-pointer ${
-              isActive ? "" : "text-black/70 hover:transition"
-            }`}
-          >
-            <Link href={item.href || ""}>{item.title}</Link>
-            {item.sub && <ChevronDown className="h-4 w-4" />}
-          </div>
-
-          {/* زیرمنو همیشه نمایش داده می‌شود */}
-          {item.sub && (
-            <div className="absolute top-full right-0 z-50 mt-1">
-              <SubMenu items={item.sub} />
-            </div>
-          )}
-        </li>
-      );
-    })}
-  </ul>
-</nav>
-
-      {/* دکمه‌ها */}
-      <div className="flex items-center gap-3">
-        <Button asChild variant="secondary" className="hover:scale-105 transition">
-          <Link
-            href="https://wa.me/989035234156"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ثبت‌نام
-          </Link>
-        </Button>
-        <Button asChild variant="outline" className="hover:scale-105 transition">
-          <Link
-            href="https://instagram.com/ronak.majdi"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            ورود
-          </Link>
-        </Button>
+      <div>
+        <Input
+          placeholder="جست و جو ..."
+          className="bg-gray-100 outline-0 border-0"
+        />
       </div>
+
+      {/* 💻 دسکتاپ */}
+      <nav className="hidden md:flex items-center justify-center relative">
+        <ul className="flex gap-10 relative text-sm">
+          {menuItems.map((item) => (
+            <li
+              key={item.title}
+              className="relative group flex flex-col items-center"
+            >
+              {/* آیتم اصلی با خط قرمز انیمیشنی */}
+              <div className="flex items-center gap-1 font-medium cursor-pointer relative">
+                <Link href={item.href || ""}>{item.title}</Link>
+
+                {/* خط قرمز زیر آیتم */}
+                <span
+                  className="
+              absolute left-0 -bottom-1 h-0.5 bg-red-600 
+              w-0 group-hover:w-full 
+              transition-all duration-300 ease-out
+            "
+                />
+              </div>
+
+              {/* مگا منو ثابت وسط صفحه */}
+              {item.sub && (
+                <div
+                  className="
+              absolute left-1/2 -translate-x-1/2 top-10 z-50
+              hidden group-hover:flex 
+              bg-white shadow-xl rounded-xl 
+              p-6 w-[850px] 
+              items-center justify-between
+              transition-all duration-300
+            "
+                >
+                  {/* محتوا */}
+                  <div className="flex justify-between w-full">
+                    {/* ستون‌ها */}
+                    <div className="grid grid-cols-3 gap-10 w-2/3">
+                      {item.sub.map((subItem) => (
+                        <div
+                          key={subItem.title}
+                          className="flex flex-col gap-2"
+                        >
+                          <h4 className="font-semibold text-red-600">
+                            {subItem.title}
+                          </h4>
+
+                          {subItem.sub && (
+                            <ul className="flex flex-col gap-1 text-sm leading-6">
+                              {subItem.sub.map((child) => (
+                                <li key={child.title}>
+                                  <Link
+                                    href={child.href || ""}
+                                    className="text-black/80 hover:text-black transition"
+                                  >
+                                    {child.title}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* تصویر سمت راست */}
+                    <div className="w-64 h-64 relative hidden lg:block">
+                      <Image
+                        src={item.image || ""}
+                        alt="preview"
+                        fill
+                        className="object-contain rounded-lg"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <BasketCard />
     </header>
   );
-}
+};
 export default NavBar;

@@ -5,7 +5,7 @@ import { MenuItem } from "@/types";
 export const menuItems: MenuItem[] = [
   {
     title: "کنسول‌های بازی",
-    image: "/images/menu/consoles.png",
+    image: "/assets/images/menu/consoles.jpg",
     sub: [
       { title: "PS5", href: "/consoles/ps5" },
       { title: "Xbox Series X", href: "/consoles/xbox-series-x" },
@@ -14,7 +14,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     title: "لوازم جانبی",
-    image: "/images/menu/accessories.png",
+    image: "/assets/images/menu/janebi.jpg",
     sub: [
       {
         title: "دسته‌ها و کنترلرها",
@@ -38,7 +38,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     title: "دیگر کالاها",
-    image: "/images/menu/others.png",
+    image: "/assets/images/menu/other-product.webp",
     sub: [
       { title: "بازی‌ها", href: "/others/games" },
       { title: "کارت هدیه", href: "/others/gift-cards" },
